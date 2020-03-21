@@ -33,7 +33,7 @@ from OpenGL.GLU import *
 # x_g=float(input("xg =  "))
 # y_g=float(input("yg =  "))
 # resolution=int(input("Enter Resolution (must be an integer value) =  "))
-# Theta_s = float(input(" Enter Theta_s="))
+# Theta_s = float(input("Enter Theta_s="))
 # d= float(input("Enter step size of movements(must be within 1-10")
 
 radius=1
@@ -75,29 +75,62 @@ white = [255,255,255]
 
 #  To display obstacles 
 def obstacles_display(x,y,resolution):
-	clearance = 0
+	obs_pix = 0
 	# Circle
 	if ((x-math.ceil(225/resolution))**2+math.ceil(y-(150/resolution))**2-math.ceil(25/resolution)**2)<=0:
-		clearance = 1
+		obs_pix = 1
 
 	# Ellipse
 	if ((x-math.ceil(150/resolution))/math.ceil(40/resolution))**2+((y-math.ceil(100/resolution))/math.ceil(20/resolution))**2 - 1<=0:
-		clearance = 1
+		obs_pix = 1
 
-	# Rectangle
-	x_pts = np.array([95,95+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30)), 95])/resolution
-	y_pts = np.array([30,30+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30)), 30])/resolution
+	# Tilted Rectangle
+	x_pts = np.array([95,95+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))])/resolution
+	y_pts = np.array([30,30+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))])/resolution
 
-	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0]) - 1/resolution * (1+math.sqrt(((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))**2))   
-	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) - 1/resolution * (1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))   
-	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) +  1/resolution * (1+math.sqrt(((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))**2))   
-	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) +  1/resolution * (1+math.sqrt(((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))**2))
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0])    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1])    
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2])    
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) 
 
 	if (l1 and l2 and l3 and l4):
-		clearance = 1
+		obs_pix = 1
 
+	# Rhombus
+	x_pts = np.array([225,254.15,225,195.85])/resolution
+	y_pts = np.array([10,25,40,25])/resolution
 
-	return clearance
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0])    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1])    
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2])    
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) 
+
+	if (l1 and l2 and l3 and l4):
+		obs_pix = 1
+
+	# Polygon 1
+	x_pts = np.array([75,100,75,50])/resolution
+	y_pts = np.array([120,150,185,150])/resolution
+
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0])    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1])
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) 
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) 
+
+	if (l1 and l2 and l3 and l4):
+		obs_pix = 1
+
+	# Polygon 2 
+	x_pts = np.array([75,25,20])/resolution
+	y_pts = np.array([185,185,120])/resolution   
+	l5 = (y-y_pts[0]) <= 0
+	l6 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) 
+	l7 = (y-y_pts[2]) >= ((y_pts[0]-y_pts[2])/(x_pts[0]-x_pts[2]))*(x-x_pts[2])
+	
+	if (l5 and l6 and l7):
+		obs_pix = 1
+
+	return obs_pix
 
 	
 
@@ -111,15 +144,48 @@ def Map(x,y,resolution,d=radius+clearance):
 	if ((x-math.ceil(150/resolution))/(math.ceil(40+d)/resolution))**2 + ((y - math.ceil(100/resolution))/(math.ceil(20+d)/resolution))**2 - 1 < 0:
 		q=1
 	
-	x_pts = np.array([95,95+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30)), 95])/resolution
-	y_pts = np.array([30,30+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30)), 30])/resolution
+	x_pts = np.array([95,95+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))+10*math.cos(math.radians(60)), 95-75*math.cos(math.radians(30))])/resolution
+	y_pts = np.array([30,30+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))+10*math.sin(math.radians(60)), 30+75*math.sin(math.radians(30))])/resolution
 
-	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0]) - d-1/resolution * (1+math.sqrt(((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))**2))   
-	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) - d-1/resolution * (1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))   
-	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) +  d-1/resolution * (1+math.sqrt(((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))**2))   
-	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) +  d-1/resolution * (1+math.sqrt(((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))**2))
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0]) - d/resolution*(1+math.sqrt(((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))**2))    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) + d/resolution*(1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))  
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) + d/resolution*(1+math.sqrt(((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))**2))    
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) - d/resolution*(1+math.sqrt(((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))**2)) 
 
 	if (l1 and l2 and l3 and l4):
+		q = 1
+
+	# Rhombus
+	x_pts = np.array([225,250,225,200])/resolution
+	y_pts = np.array([10,25,40,25])/resolution
+
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0]) - d/resolution*(1+math.sqrt(((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))**2))    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) + d/resolution*(1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))  
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) + d/resolution*(1+math.sqrt(((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))**2))    
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) - d/resolution*(1+math.sqrt(((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))**2))
+
+	if (l1 and l2 and l3 and l4):
+		q = 1
+	# Polygon 1
+	x_pts = np.array([75,100,75,50])/resolution
+	y_pts = np.array([120,150,185,150])/resolution
+
+	l1 = (y-y_pts[0]) >= ((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))*(x-x_pts[0]) - d/resolution*(1+math.sqrt(((y_pts[1]-y_pts[0])/(x_pts[1]-x_pts[0]))**2))    
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) + d/resolution*(1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))  
+	l3 = (y-y_pts[2]) <= ((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))*(x-x_pts[2]) + d/resolution*(1+math.sqrt(((y_pts[3]-y_pts[2])/(x_pts[3]-x_pts[2]))**2))    
+	l4 = (y-y_pts[3]) >= ((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))*(x-x_pts[3]) - d/resolution*(1+math.sqrt(((y_pts[0]-y_pts[3])/(x_pts[0]-x_pts[3]))**2))
+	if (l1 and l2 and l3 and l4):
+		q = 1
+
+	# Polygon 2 
+	x_pts = np.array([75,25,20])/resolution
+	y_pts = np.array([185,185,120])/resolution   
+	l1 = (y-y_pts[0]) <= 0 + d/resolution
+	l2 = (y-y_pts[1]) <= ((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))*(x-x_pts[1]) - d/resolution*(1+math.sqrt(((y_pts[2]-y_pts[1])/(x_pts[2]-x_pts[1]))**2))
+	l3 = (y-y_pts[2]) >= ((y_pts[0]-y_pts[2])/(x_pts[0]-x_pts[2]))*(x-x_pts[2]) - d/resolution*(1+math.sqrt(((y_pts[0]-y_pts[2])/(x_pts[0]-x_pts[2]))**2))
+	
+
+	if (l1 and l2 and l3):
 		q = 1
 
 	return q
@@ -219,7 +285,7 @@ ndx = start
 flag = 0
 exit = 0 
 count =0
-
+start_time = time()
 while(flag!=1 and c_nd !=[]):
 	
 	# To move up
@@ -424,7 +490,7 @@ for i in range (0,301):
 		if q == 1:
 			obstacles_spaces.append([i,j])
 
-k=3
+k=5
 my_list = np.array(vc_nd)
 vc_nd = my_list*k*resolution
 my_list_1 = np.array(sequence)
@@ -450,6 +516,10 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Output")
 clock = pygame.time.Clock()
 done = False
+end_time = time()
+
+# To calculate the solving time for the algorithm 
+print("Time taken {} seconds to solve".format(end_time-start_time))
 
 while not done:
 	for event in pygame.event.get():
@@ -495,12 +565,6 @@ while not done:
 	# img2 = ImageOps.flip(img)
 	# img2.save('frame%061.png'%(farme_number))
 	
-
-	# To calculate the solving time for the algorithm 
-	start_time = time()
-	end_time = time()
-
-	print("Time taken{} seconds to solve".format(end_time-start_time))
 	
 	# if video: 
 	# 	next(save_screen)
