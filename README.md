@@ -10,7 +10,7 @@ The libraries being imported to run the code are:
 2. math
 3. pygame
 4. sys 
-5.python 2.7
+5. python 2.7
 
 ## Install Depemdencies
 ```
@@ -37,9 +37,9 @@ step size : 1
 ```
 
 ## Run Code
-1. Extract Proj3p2_MoumitaPaul_python folder on desktop
+1. Extract Proj3p2_MoumitaPaul_Python folder on desktop
 2. Go to Codes folder
-$ cd Desktop/moumita_proj_2/Codes
+$ cd Desktop/Proj3p2_MoumitaPaul_Python
 
  
 To run the code:
